@@ -37,14 +37,14 @@ void printPDU(uint8_t * aPDU, int pduLength){
     else{
         uint32_t seqNum = 0;
         uint8_t flag = 0; 
-        char *payload = (char *)malloc(sizeof(uint8_t) * (pduLength - 7));
+        uint8_t *payload = (uint8_t*)malloc(sizeof(uint8_t) * (pduLength - 7));
 
         memcpy(&seqNum, aPDU, 4);
         memcpy(&flag, aPDU + 6, 1);
         memcpy(payload, aPDU + 7, pduLength - 7);
 
         seqNum = ntohl(seqNum);
-        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s.\n", seqNum, flag, pduLength - 7, payload);
+        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s\n", seqNum, flag, pduLength - 7, payload);
         free(payload);
     }
 }
