@@ -39,7 +39,7 @@ void printPDU(uint8_t * aPDU, int pduLength){
     if(!(crc == 0)){
         /*checksum fails*/
         perror("checksum failed");
-        /*printf("checksum was : %d\n", crc);*/
+        printf("Checksum failed, was : %d\n", crc);
         exit(-1);
     }
     else{
