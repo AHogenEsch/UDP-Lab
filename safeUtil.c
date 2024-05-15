@@ -25,7 +25,7 @@ int safeRecvfrom(int socketNum, void * buf, int len, int flags, struct sockaddr 
 		perror("recvfrom: ");
 		exit(-1);
 	}
-	printf("safeRecvfrom payload: %s\n", (char *)(buf + (sizeof(uint8_t) * 7)));
+	/*printf("safeRecvfrom payload: %s\n", (char *)(buf + (sizeof(uint8_t) * 7)));*/
 	return returnValue;
 }
 
