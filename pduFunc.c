@@ -15,10 +15,10 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
     memcpy(pduBuffer, &seqNumNW, sizeof(uint32_t));
     memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
     /* do I need to clear the crc bits in the PDU before calling checksum? */
-    crc = in_cksum(pduBuffer, 7);
+    crc = in_cksum((short unsigned int *)pduBuffer, 7);
     memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
     
-    memcpy(pduBuffer + (sizeof(uint8_t) * 7), &ayload, payLoadLen);
+    memcpy(pduBuffer + (sizeof(uint8_t) * 7), &payload, payLoadLen);
      pduLength = payLoadLen + 7;
 
     return pduLength;
@@ -26,7 +26,7 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
 
 void printPDU(uint8_t * aPDU, int pduLength){
     /*checking the 7 byte header*/
-    if(!in_cksum(aPDU, 7)){
+    if(!in_cksum((short unsigned int *)aPDU, 7)){
         /*checksum fails*/
         perror("checksum failed");
         exit(-1);
