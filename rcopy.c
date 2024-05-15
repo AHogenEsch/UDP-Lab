@@ -70,9 +70,9 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 		dataLen = readFromStdin(payLoadbuffer);
 
 		/*printf("Sending: %s with len: %d\n", buffer,dataLen);*/
-		totalLen = createPDU(buffer, counter, 0, payLoadbuffer, dataLen);
+		totalLen = createPDU((uint8_t *)buffer, counter, 0, (uint8_t *)payLoadbuffer, dataLen);
 		counter++; 
-		printPDU(buffer, totalLen);
+		printPDU((uint8_t *)buffer, totalLen);
 
 		safeSendto(socketNum, buffer, totalLen, 0, (struct sockaddr *) server, serverAddrLen);
 		
@@ -81,7 +81,8 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 		// print out bytes received
 		ipString = ipAddressToString(server);
 		printf("Server with ip: %s and port %d said it received %s\n", ipString, ntohs(server->sin6_port), buffer);
-	    /*printPDU(buffer, recvLen);*/
+	    printPDU((uint8_t *)buffer, recvLen);
+		/*printPDU(buffer, recvLen);*/
 	}
 }
 
