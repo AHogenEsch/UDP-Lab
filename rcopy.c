@@ -100,17 +100,16 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 	payLoadbuffer[0] = '\0';
 	while (payLoadbuffer[0] != '.')
 	{
-		char buffer[MAXBUF+8];
+		uint8_t buffer[MAXBUF+8];
 		/*int recvLen = 0;*/
 		dataLen = readFromStdin(payLoadbuffer);
 
 		/*printf("Sending: %s with len: %d\n", buffer,dataLen);*/
-		totalLen = createPDU((uint8_t *)buffer, counter, 0, (uint8_t *)payLoadbuffer, dataLen);
+		totalLen = createPDU(buffer, counter, 0, (uint8_t *)payLoadbuffer, dataLen);
 		counter++; 
-		printPDU((uint8_t *)buffer, totalLen);
 
 		safeSendto(socketNum, buffer, totalLen, 0, (struct sockaddr *) server, serverAddrLen);
-		
+		printPDU(buffer, totalLen);
 		/*recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
 		
 		// print out bytes received
