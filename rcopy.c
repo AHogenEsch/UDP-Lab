@@ -111,6 +111,7 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 
 		safeSendto(socketNum, buffer, totalLen, 0, (struct sockaddr *) server, serverAddrLen);
 		printPDU(buffer, totalLen);
+		printf("Enter data: \n");
 		/*recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
 		
 		// print out bytes received

@@ -42,7 +42,7 @@ int main ( int argc, char *argv[]  )
 void processClient(int socketNum)
 {
 	int dataLen = 0; 
-	char buffer[MAXBUF + 1];	  
+	uint8_t buffer[MAXBUF + 1];	  
 	struct sockaddr_in6 client;		
 	int clientAddrLen = sizeof(client);	
 	
@@ -53,8 +53,8 @@ void processClient(int socketNum)
 	
 		printf("Received message from client with ");
 		printIPInfo(&client);
-		printf(" Len: %d \'%s\'\n", dataLen, buffer);
-		printPDU((uint8_t *)buffer, dataLen);
+		/*printf(" Len: %d \'%s\'\n", dataLen, buffer);*/
+		printPDU(buffer, dataLen);
 		// just for fun send back to client number of bytes received
 		/*sprintf(buffer, "bytes: %d\0", dataLen);
 		safeSendto(socketNum, buffer, strlen(buffer)+1, 0, (struct sockaddr *) & client, clientAddrLen);*/
