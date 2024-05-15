@@ -53,6 +53,5 @@ void printPDU(uint8_t * aPDU, int pduLength){
 
         seqNum = ntohl(seqNum);
         printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s\n", seqNum, flag, pduLength - 7, payload);
-        free(payload);
     }
 }
