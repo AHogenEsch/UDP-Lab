@@ -23,9 +23,11 @@ int main ( int argc, char *argv[]  )
 { 
 	int socketNum = 0;				
 	int portNumber = 0;
+	double errRate = 0;
 
 	portNumber = checkArgs(argc, argv);
-		
+	errRate = atof(argv[1]);
+	
 	socketNum = udpServerSetup(portNumber);
 
 	processClient(socketNum);
@@ -63,15 +65,15 @@ int checkArgs(int argc, char *argv[])
 	// Checks args and returns port number
 	int portNumber = 0;
 
-	if (argc > 2)
+	if (argc > 3)
 	{
-		fprintf(stderr, "Usage %s [optional port number]\n", argv[0]);
+		fprintf(stderr, "Usage %s [error percentage] [optional port number]\n", argv[0]);
 		exit(-1);
 	}
 	
-	if (argc == 2)
+	if (argc == 3)
 	{
-		portNumber = atoi(argv[1]);
+		portNumber = atoi(argv[2]);
 	}
 	
 	return portNumber;

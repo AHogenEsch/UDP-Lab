@@ -23,18 +23,22 @@
 
 void talkToServer(int socketNum, struct sockaddr_in6 * server);
 int readFromStdin(char * buffer);
-int checkArgs(int argc, char * argv[]);
+void checkArgs(int argc, char * argv[]);
 
 
 int main (int argc, char *argv[])
  {
+	/* rcopy .1 localhost 44444 */
 	int socketNum = 0;				
 	struct sockaddr_in6 server;		// Supports 4 and 6 but requires IPv6 struct
 	int portNumber = 0;
+	double errRate = 0;
 	
-	portNumber = checkArgs(argc, argv);
-	
-	socketNum = setupUdpClientToServer(&server, argv[1], portNumber);
+	checkArgs(argc, argv);
+	portNumber = atoi(argv[3]); 
+	socketNum = setupUdpClientToServer(&server, argv[2], portNumber);
+
+	errRate = atof(argv[1]);
 	
 	talkToServer(socketNum, &server);
 	
@@ -93,10 +97,10 @@ int readFromStdin(char * buffer)
 	return inputLen;
 }
 
-int checkArgs(int argc, char * argv[])
+void checkArgs(int argc, char * argv[])
 {
 
-        int portNumber = 0;
+       /*int portNumber = 0;*/
 	
         /* check command line arguments  */
 	if (argc != 3)
@@ -105,9 +109,9 @@ int checkArgs(int argc, char * argv[])
 		exit(1);
 	}
 	
-	portNumber = atoi(argv[2]);
+	/*portNumber = atoi(argv[2]);*/
 		
-	return portNumber;
+	return ;
 }
 
 
