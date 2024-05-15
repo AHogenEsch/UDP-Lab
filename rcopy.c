@@ -29,6 +29,38 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server);
 int readFromStdin(char * buffer);
 void checkArgs(int argc, char * argv[]);
 
+void rcopyControl(int socketNum,  struct sockaddr_in6 * server){
+	int pollCheck;
+	uint8_t sendBuf[MAXBUF];
+	int sendLen;
+	setupPollSet();
+	addToPollSet(socketNum);
+	addToPollSet(STDIN_FILENO);
+	printf("Enter Data: \n");
+	while(1){
+		/*begin the process of asking the user for their message*/
+		
+		pollCheck = pollCall(-1);
+		if(pollCheck < 0){
+			printf("pollCall() Timed Out\n");
+		}
+		else if(pollCheck == socketNum){
+			/*Server sent a message*/
+			/*recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
+		
+			// print out bytes received
+			ipString = ipAddressToString(server);
+			printf("Server with ip: %s and port %d said it received %s\n", ipString, ntohs(server->sin6_port), buffer);
+			printPDU((uint8_t *)buffer, recvLen);*/
+			/*printPDU(buffer, recvLen);*/
+			printf("Server sent a message back\n");
+		}
+		else if(pollCheck == STDIN_FILENO){
+			talkToServer(socketNum, server);
+		}
+	}
+}
+
 
 int main (int argc, char *argv[])
  {
@@ -45,7 +77,8 @@ int main (int argc, char *argv[])
 	errRate = atof(argv[1]);
 	sendErr_init(errRate, DROP_ON, FLIP_ON, DEBUG_ON, RSEED_OFF);
 	
-	talkToServer(socketNum, &server);
+	rcopyControl(socketNum, &server);
+	/*talkToServer(socketNum, &server);*/
 	
 	close(socketNum);
 
@@ -76,12 +109,12 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 
 		safeSendto(socketNum, buffer, totalLen, 0, (struct sockaddr *) server, serverAddrLen);
 		
-		recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
+		/*recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
 		
 		// print out bytes received
 		ipString = ipAddressToString(server);
 		printf("Server with ip: %s and port %d said it received %s\n", ipString, ntohs(server->sin6_port), buffer);
-	    printPDU((uint8_t *)buffer, recvLen);
+	    printPDU((uint8_t *)buffer, recvLen);*/
 		/*printPDU(buffer, recvLen);*/
 	}
 }
@@ -93,7 +126,7 @@ int readFromStdin(char * buffer)
 	
 	// Important you don't input more characters than you have space 
 	buffer[0] = '\0';
-	printf("Enter data: ");
+	/*printf("Enter data: ");*/
 	while (inputLen < (MAXBUF - 1) && aChar != '\n')
 	{
 		aChar = getchar();
