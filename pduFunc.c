@@ -4,7 +4,7 @@
     PDU format:
     [ 4 byte sequence number in network order] [ 2 byte checksum ] [ 1 byte flag] [ payload (up to 1400 bytes)]
     */
-
+#include "pduFunc.h"
 
 int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *payload, int payLoadLen){
     /* converts seqnumber to network order. Uses checksum to calculate the crc header value*/
