@@ -53,6 +53,6 @@ void printPDU(uint8_t * aPDU, int pduLength){
         /*memcpy(&payload, aPDU + 7, pduLength - 7);*/
 
         seqNum = ntohl(seqNum);
-        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %32s\n", seqNum, flag, payLoadLength, aPDU + (sizeof(uint8_t) * 7));
+        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s\n", seqNum, flag, payLoadLength, aPDU + (sizeof(uint8_t) * 7));
     }
 }
