@@ -53,6 +53,7 @@ void processClient(int socketNum)
 	
 		printf("Received message from client with ");
 		printIPInfo(&client);
+		printf("payload: %s", buffer + 7)
 		/*printf(" Len: %d \'%s\'\n", dataLen, buffer);*/
 		printPDU(buffer, dataLen);
 		// just for fun send back to client number of bytes received

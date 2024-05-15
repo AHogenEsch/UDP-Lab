@@ -46,13 +46,13 @@ void printPDU(uint8_t * aPDU, int pduLength){
         uint32_t seqNum = 0;
         uint8_t flag = 0; 
         int payLoadLength = pduLength - 7;
-        /*uint8_t payload[MAXBUF];*/
+        uint8_t payload[MAXBUF];
 
         memcpy(&seqNum, aPDU, 4);
         memcpy(&flag, aPDU + 6, 1);
-        /*memcpy(&payload, aPDU + 7, pduLength - 7);*/
+        memcpy(&payload, aPDU + 7, pduLength - 7);
 
         seqNum = ntohl(seqNum);
-        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s\n", seqNum, flag, payLoadLength, aPDU + (sizeof(uint8_t) * 7));
+        printf("Sequence: %d, Flag: %d, PayloadLength: %d, Payload: %s\n", seqNum, flag, payLoadLength, payload);
     }
 }
