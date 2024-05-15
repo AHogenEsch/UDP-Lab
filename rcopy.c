@@ -14,10 +14,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
+
 
 #include "gethostbyname.h"
 #include "networks.h"
 #include "safeUtil.h"
+#include "pduFunc.h"
+#include "cpe464.h"
 
 #define MAXBUF 80
 
@@ -39,6 +43,7 @@ int main (int argc, char *argv[])
 	socketNum = setupUdpClientToServer(&server, argv[2], portNumber);
 
 	errRate = atof(argv[1]);
+	sendErr_init(errRate, DROP_ON, FLIP_ON, DEBUG_ON, RSEED_OFF);
 	
 	talkToServer(socketNum, &server);
 	
@@ -52,23 +57,31 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 	int serverAddrLen = sizeof(struct sockaddr_in6);
 	char * ipString = NULL;
 	int dataLen = 0; 
-	char buffer[MAXBUF+1];
-	
-	buffer[0] = '\0';
-	while (buffer[0] != '.')
-	{
-		dataLen = readFromStdin(buffer);
+	char payLoadbuffer[MAXBUF+1];
+	int totalLen = 0;
 
-		printf("Sending: %s with len: %d\n", buffer,dataLen);
+	int counter = 0;
 	
-		safeSendto(socketNum, buffer, dataLen, 0, (struct sockaddr *) server, serverAddrLen);
+	payLoadbuffer[0] = '\0';
+	while (payLoadbuffer[0] != '.')
+	{
+		char buffer[MAXBUF+8];
+		int recvLen = 0;
+		dataLen = readFromStdin(payLoadbuffer);
+
+		/*printf("Sending: %s with len: %d\n", buffer,dataLen);*/
+		totalLen = createPDU(buffer, counter, 0, payLoadbuffer, dataLen);
+		counter++; 
+		printPDU(buffer, totalLen);
+
+		safeSendto(socketNum, buffer, totalLen, 0, (struct sockaddr *) server, serverAddrLen);
 		
-		safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
+		recvLen = safeRecvfrom(socketNum, buffer, MAXBUF, 0, (struct sockaddr *) server, &serverAddrLen);
 		
 		// print out bytes received
 		ipString = ipAddressToString(server);
 		printf("Server with ip: %s and port %d said it received %s\n", ipString, ntohs(server->sin6_port), buffer);
-	      
+	    /*printPDU(buffer, recvLen);*/
 	}
 }
 

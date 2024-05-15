@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "gethostbyname.h": "c",
+        "networks.h": "c",
+        "safeutil.h": "c"
+    }
+}

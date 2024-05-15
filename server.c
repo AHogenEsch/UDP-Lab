@@ -13,6 +13,8 @@
 #include "gethostbyname.h"
 #include "networks.h"
 #include "safeUtil.h"
+#include "pduFunc.h"
+#include "cpe464.h"
 
 #define MAXBUF 80
 
@@ -27,7 +29,7 @@ int main ( int argc, char *argv[]  )
 
 	portNumber = checkArgs(argc, argv);
 	errRate = atof(argv[1]);
-	
+	sendErr_init(errRate, DROP_ON, FLIP_ON, DEBUG_ON, RSEED_OFF);
 	socketNum = udpServerSetup(portNumber);
 
 	processClient(socketNum);
@@ -51,10 +53,10 @@ void processClient(int socketNum)
 	
 		printf("Received message from client with ");
 		printIPInfo(&client);
-		printf(" Len: %d \'%s\'\n", dataLen, buffer);
-
+		/*printf(" Len: %d \'%s\'\n", dataLen, buffer);*/
+		printPDU(buffer, dataLen);
 		// just for fun send back to client number of bytes received
-		sprintf(buffer, "bytes: %d", dataLen);
+		sprintf(buffer, "bytes: %d\0", dataLen);
 		safeSendto(socketNum, buffer, strlen(buffer)+1, 0, (struct sockaddr *) & client, clientAddrLen);
 
 	}
