@@ -12,13 +12,13 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
     unsigned short crc = 0;
     uint32_t seqNumNW = htonl(seqNum);
 
-    memcpy(pduBuffer, seqNumNW, sizeof(uint32_t));
-    memcpy(pduBuffer + (sizeof(uint8_t) * 6), flag, sizeof(uint8_t));
+    memcpy(pduBuffer, &seqNumNW, sizeof(uint32_t));
+    memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
     /* do I need to clear the crc bits in the PDU before calling checksum? */
     crc = in_cksum(pduBuffer, 7);
-    memcpy(pduBuffer + (sizeof(uint8_t) * 4), crc, sizeof(uint16_t));
+    memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
     
-    memcpy(pduBuffer + (sizeof(uint8_t) * 7), payload, payLoadLen);
+    memcpy(pduBuffer + (sizeof(uint8_t) * 7), &ayload, payLoadLen);
      pduLength = payLoadLen + 7;
 
     return pduLength;
@@ -36,8 +36,8 @@ void printPDU(uint8_t * aPDU, int pduLength){
         uint8_t flag = 0; 
         uint8_t *payload = (uint8_t *)malloc(sizeof(uint8_t) * (pduLength - 7));
 
-        memcpy(seqNum, aPDU, 4);
-        memcpy(flag, aPDU + 6, 1);
+        memcpy(&seqNum, aPDU, 4);
+        memcpy(&flag, aPDU + 6, 1);
         memcpy(payload, aPDU + 7, pduLength - 7);
 
         seqNum = ntohl(seqNum);
