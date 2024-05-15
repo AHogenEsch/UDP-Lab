@@ -22,6 +22,7 @@
 #include "safeUtil.h"
 #include "pduFunc.h"
 #include "cpe464.h"
+#include "pollLib.h"
 
 #define MAXBUF 80
 
@@ -31,8 +32,8 @@ void checkArgs(int argc, char * argv[]);
 
 void rcopyControl(int socketNum,  struct sockaddr_in6 * server){
 	int pollCheck;
-	uint8_t sendBuf[MAXBUF];
-	int sendLen;
+	/*uint8_t sendBuf[MAXBUF];*/
+	/*int sendLen;*/
 	setupPollSet();
 	addToPollSet(socketNum);
 	addToPollSet(STDIN_FILENO);
@@ -88,7 +89,7 @@ int main (int argc, char *argv[])
 void talkToServer(int socketNum, struct sockaddr_in6 * server)
 {
 	int serverAddrLen = sizeof(struct sockaddr_in6);
-	char * ipString = NULL;
+	/*char * ipString = NULL;*/
 	int dataLen = 0; 
 	char payLoadbuffer[MAXBUF+1];
 	int totalLen = 0;
@@ -99,7 +100,7 @@ void talkToServer(int socketNum, struct sockaddr_in6 * server)
 	while (payLoadbuffer[0] != '.')
 	{
 		char buffer[MAXBUF+8];
-		int recvLen = 0;
+		/*int recvLen = 0;*/
 		dataLen = readFromStdin(payLoadbuffer);
 
 		/*printf("Sending: %s with len: %d\n", buffer,dataLen);*/

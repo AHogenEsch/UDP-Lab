@@ -3,6 +3,7 @@
         "gethostbyname.h": "c",
         "networks.h": "c",
         "safeutil.h": "c",
-        "cpe464.h": "c"
+        "cpe464.h": "c",
+        "polllib.h": "c"
     }
 }
