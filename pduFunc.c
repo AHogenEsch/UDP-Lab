@@ -9,18 +9,20 @@
 int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *payload, int payLoadLen){
     /* converts seqnumber to network order. Uses checksum to calculate the crc header value*/
     int pduLength = 0;
-    unsigned short crc = 0;
+    uint16_t crc = 0;
     uint32_t seqNumNW = htonl(seqNum);
     uint16_t zero = 0;
 
     memcpy(pduBuffer, &seqNumNW, sizeof(uint32_t));
     memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
-    memcpy(pduBuffer +(sizeof(uint8_t) * 4), &zero, sizeof(uint16_t));
-    crc = in_cksum((short unsigned int *)pduBuffer, payLoadLen + 7);
-    memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
+    /* zeroing out checksum bits*/
     
     memcpy(pduBuffer + (sizeof(uint8_t) * 7), &payload, payLoadLen);
      pduLength = payLoadLen + 7;
+    
+    memcpy(pduBuffer +(sizeof(uint8_t) * 4), &zero, sizeof(uint16_t));
+    crc = (uint16_t)in_cksum((short unsigned int *)pduBuffer, pduLength);
+    memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
 
     return pduLength;
 }
