@@ -11,17 +11,21 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
     int pduLength = 0;
     uint16_t crc = 0;
     uint32_t seqNumNW = htonl(seqNum);
-    uint16_t zero = 0;
 
+    /*putting the header in the PDU*/
     memcpy(pduBuffer, &seqNumNW, sizeof(uint32_t));
-    memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
     /* zeroing out checksum bits*/
+    memcpy(pduBuffer +(sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
+    memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
     
+    /*Putting the payload into the PDU*/
     memcpy(pduBuffer + (sizeof(uint8_t) * 7), &payload, payLoadLen);
-     pduLength = payLoadLen + 7;
     
-    memcpy(pduBuffer +(sizeof(uint8_t) * 4), &zero, sizeof(uint16_t));
+    pduLength = payLoadLen + 7;  
+    
+    /*running checksum on the entire PDU*/
     crc = (uint16_t)in_cksum((short unsigned int *)pduBuffer, pduLength);
+    printf("Checksum: %d", crc);
     memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
 
     return pduLength;
@@ -29,9 +33,11 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
 
 void printPDU(uint8_t * aPDU, int pduLength){
     /*checking the 7 byte header*/
-    if(!in_cksum((short unsigned int *)aPDU, pduLength)){
+    short unsigned int crc = in_cksum((short unsigned int *)aPDU, pduLength);
+    if(!crc){
         /*checksum fails*/
         perror("checksum failed");
+        printf("checksum was : %d", crc);
         exit(-1);
     }
     else{
