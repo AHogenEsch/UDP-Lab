@@ -21,7 +21,7 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
     memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
     
     /*Putting the payload into the PDU*/
-    memcpy(pduBuffer + (sizeof(uint8_t) * 7), &payload, payLoadLen);
+    memcpy(pduBuffer + (sizeof(uint8_t) * 7), payload, payLoadLen);
     
     pduLength = payLoadLen + 7;  
     
