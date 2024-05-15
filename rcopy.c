@@ -117,9 +117,9 @@ void checkArgs(int argc, char * argv[])
        /*int portNumber = 0;*/
 	
         /* check command line arguments  */
-	if (argc != 3)
+	if (argc != 4)
 	{
-		printf("usage: %s host-name port-number \n", argv[0]);
+		printf("usage: %s error-percentage host-name port-number \n", argv[0]);
 		exit(1);
 	}
 	

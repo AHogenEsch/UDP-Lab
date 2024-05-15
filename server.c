@@ -67,7 +67,7 @@ int checkArgs(int argc, char *argv[])
 	// Checks args and returns port number
 	int portNumber = 0;
 
-	if (argc > 3)
+	if (argc > 3 || argc < 2)
 	{
 		fprintf(stderr, "Usage %s [error percentage] [optional port number]\n", argv[0]);
 		exit(-1);
