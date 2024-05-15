@@ -15,7 +15,7 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
 
     memcpy(pduBuffer, &seqNumNW, sizeof(uint32_t));
     memcpy(pduBuffer + (sizeof(uint8_t) * 6), &flag, sizeof(uint8_t));
-    memcpy(pduBuffer +(sizeof(uint8_t) * 4), zero, sizeof(uint16_t));
+    memcpy(pduBuffer +(sizeof(uint8_t) * 4), &zero, sizeof(uint16_t));
     crc = in_cksum((short unsigned int *)pduBuffer, payLoadLen + 7);
     memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
     
