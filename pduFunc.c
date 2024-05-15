@@ -5,6 +5,8 @@
     [ 4 byte sequence number in network order] [ 2 byte checksum ] [ 1 byte flag] [ payload (up to 1400 bytes)]
     */
 #include "pduFunc.h"
+#define MAXBUF 1400
+
 
 int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *payload, int payLoadLen){
     /* converts seqnumber to network order. Uses checksum to calculate the crc header value*/
@@ -25,7 +27,7 @@ int createPDU(uint8_t * pduBuffer, uint32_t seqNum, uint8_t flag, uint8_t *paylo
     
     /*running checksum on the entire PDU*/
     crc = (uint16_t)in_cksum((short unsigned int *)pduBuffer, pduLength);
-    printf("Checksum: %d\n", crc);
+    /*printf("Checksum: %d\n", crc);*/
     memcpy(pduBuffer + (sizeof(uint8_t) * 4), &crc, sizeof(uint16_t));
 
     return pduLength;
@@ -37,13 +39,13 @@ void printPDU(uint8_t * aPDU, int pduLength){
     if(!(crc == 0)){
         /*checksum fails*/
         perror("checksum failed");
-        printf("checksum was : %d\n", crc);
+        /*printf("checksum was : %d\n", crc);*/
         exit(-1);
     }
     else{
         uint32_t seqNum = 0;
         uint8_t flag = 0; 
-        uint8_t *payload = (uint8_t*)malloc(sizeof(uint8_t) * (pduLength - 7));
+        uint8_t payload[MAXBUF];
 
         memcpy(&seqNum, aPDU, 4);
         memcpy(&flag, aPDU + 6, 1);

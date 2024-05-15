@@ -37,9 +37,9 @@ void rcopyControl(int socketNum,  struct sockaddr_in6 * server){
 	setupPollSet();
 	addToPollSet(socketNum);
 	addToPollSet(STDIN_FILENO);
-	
+	printf("Enter Data: \n");
 	while(1){
-		printf("Enter Data: \n");
+		
 		/*begin the process of asking the user for their message*/
 		
 		pollCheck = pollCall(-1);
@@ -58,6 +58,7 @@ void rcopyControl(int socketNum,  struct sockaddr_in6 * server){
 			printf("Server sent a message back\n");
 		}
 		else if(pollCheck == STDIN_FILENO){
+			printf("Enter Data: \n");
 			talkToServer(socketNum, server);
 		}
 	}
